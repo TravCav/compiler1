@@ -1,13 +1,15 @@
 (function() {
 var fs = require('fs');	// so we can read and write files
 function SaveToFile() {
-	console.log("Writing to file.");
-	fs.writeFile("cp1.il", output, function(err) {
-		if(err) {
-			return console.log(err);
-		}
-	}); 
-	console.log("File Saved");
+	if ((EmitMethod & EmitFlags.EmitFile) === EmitFlags.EmitFile){
+		console.log("Writing to file.");
+		fs.writeFile("cp1.il", fileOutput, function(err) {
+			if(err) {
+				return console.log(err);
+			}
+		}); 
+		console.log("File Saved");
+	}
 };
 
 var exec = require('child_process').exec;
@@ -17,11 +19,18 @@ function CompileIL() {
 	});
 };
 
+var EmitFlags = {
+	EmitScreen: 1,
+	EmitFile: 2	
+};
+ 
+var EmitMethod = EmitFlags.EmitScreen | EmitFlags.EmitFile;
+
 
 console.log('***begin***');
-var input = "4+6";	// this is the program i'm compiling
+var input = "4-3";	// this is the program i'm compiling
 console.log("input: " + input);
-var output = "";		// compiled code 
+var fileOutput = ""; 
 
 // Gets the next character each time
 function Reader(){
@@ -36,16 +45,62 @@ function Reader(){
 var look = ''; // current character we're looking at
 var read = Reader();	// now we can just call read() and get the next character
 
+// this will abstract what we output to.
+function EmitLn(s) {
+	if ((EmitMethod & EmitFlags.EmitScreen) === EmitFlags.EmitScreen){
+		console.log(s);	
+	}
+	
+	if ((EmitMethod & EmitFlags.EmitFile) === EmitFlags.EmitFile){
+		fileOutput += s + "\r\n";
+	}
+};
+
 function Expected(s){
 	throw (s + " Expected");
 };
 
+function Expression(){
+	Term();
+	EmitLn('MOVE D0,D1');
+	switch(look){
+		case '+': 
+			Add(); 
+			break;
+		case '-': 
+			Subtract(); 
+			break;
+		default:
+			Expected('Addop');
+			break;
+	}
+};
+
+function Add(){
+	Match('+');
+	Term();
+	EmitLn('ADD D1,DO');
+}
+
+function Subtract(){
+	Match('-');
+	Term();
+	EmitLn('SUB D1,DO');
+	EmitLn('NEG DO')
+}
+
+function Term(){
+	EmitLn('MOVE #' + GetNum() + ',D0');
+};
+
 function GetName(){
-	if (!IsAlpha(look)) {
+	var tempLook = look;
+	if (!IsAlpha(tempLook)) {
 		Expected('Name');
 	}
 	
 	GetChar();
+	return tempLook;
 }
 
 function GetNum(){
@@ -57,10 +112,6 @@ function GetNum(){
 	GetChar();
 	return tempLook;
 }
-
-function Expression(){
-	console.log('MOVE #' + GetNum() + ',D0');
-};
 
 function GetChar(){
 	look = read();
@@ -82,7 +133,7 @@ function IsDigit(c){
 }
 
 function Match(x){
-	if (look == x){
+	if (look === x){
 		GetChar();
 	} else {
 		Expected('\'' + x + '\'');
@@ -93,10 +144,9 @@ function Match(x){
 Init();
 Expression();
 
-console.log("output: " + output);
 console.log('***end***');
 
-////SaveToFile();
+SaveToFile();
 ////CompileIL();
 
 })();
