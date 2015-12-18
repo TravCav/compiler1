@@ -14,7 +14,7 @@ function SaveToFile() {
 
 var exec = require('child_process').exec;
 function CompileIL() { 
-	exec('C:\Windows\Microsoft.NET\Framework\v4.0.30319\ilasm.exe cp1.il', function callback(error, stdout, stderr){
+	exec(' cp1.il', function callback(error, stdout, stderr){
     // result
 	});
 };
@@ -28,7 +28,7 @@ var EmitMethod = EmitFlags.EmitScreen | EmitFlags.EmitFile;
 
 
 console.log('***begin***');
-var input = "4-3";	// this is the program i'm compiling
+var input = "4+5-(2*3)";	// this is the program i'm compiling
 console.log("input: " + input);
 var fileOutput = ""; 
 
@@ -45,7 +45,20 @@ function Reader(){
 var look = ''; // current character we're looking at
 var read = Reader();	// now we can just call read() and get the next character
 
-// this will abstract what we output to.
+function Add(){
+	Match('+');
+	Term();
+	EmitLn('ADD (SP)+,DO');
+}
+
+function Divide(){
+	Match('/');
+	Factor();
+	EmitLn('MOVE (SP)+,D1');
+	EmitLn('DIVS D1, D0');
+};
+
+// this will abstract where the output goes
 function EmitLn(s) {
 	if ((EmitMethod & EmitFlags.EmitScreen) === EmitFlags.EmitScreen){
 		console.log(s);	
@@ -62,35 +75,30 @@ function Expected(s){
 
 function Expression(){
 	Term();
-	EmitLn('MOVE D0,D1');
-	switch(look){
-		case '+': 
-			Add(); 
-			break;
-		case '-': 
-			Subtract(); 
-			break;
-		default:
-			Expected('Addop');
-			break;
-	}
+	while(look === '+' || look === '-'){
+		EmitLn('MOVE D0,-(SP)');
+		switch(look){
+			case '+': 
+				Add(); 
+				break;
+			case '-': 
+				Subtract(); 
+				break;
+			default:
+				Expected('Addop');
+				break;
+		}
+	};
 };
 
-function Add(){
-	Match('+');
-	Term();
-	EmitLn('ADD D1,DO');
-}
-
-function Subtract(){
-	Match('-');
-	Term();
-	EmitLn('SUB D1,DO');
-	EmitLn('NEG DO')
-}
-
-function Term(){
-	EmitLn('MOVE #' + GetNum() + ',D0');
+function Factor(){
+	if (look === '(') {
+		Match('(');
+		Expression();
+		Match(')');
+	} else {
+		EmitLn('MOVE #' + GetNum() + ',D0');
+	}
 };
 
 function GetName(){
@@ -138,6 +146,37 @@ function Match(x){
 	} else {
 		Expected('\'' + x + '\'');
 	}
+};
+
+function Multiply(){
+	Match('*');
+	Factor();
+	EmitLn('MULS (SP)+,D0');
+};
+
+function Subtract(){
+	Match('-');
+	Term();
+	EmitLn('SUB (SP)+,D0');
+	EmitLn('NEG D0')
+}
+
+function Term(){
+	Factor();
+	while(look === '*' || look === '/'){
+		EmitLn('MOVE D0,-(SP)');
+		switch(look){
+			case '*':
+				Multiply();
+				break;
+			case '/':
+				Divide();
+				break;
+			default:
+				Expected('Mulop');
+				break;
+		}	
+	};
 };
 
 // our jouney begins here
