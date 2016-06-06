@@ -1,12 +1,12 @@
-.assembly app {}
+.assembly yep {}
 .assembly extern mscorlib {}
-.method static void  Main()
+.method static void Main()
 {
-  .entrypoint
-  .maxstack  1
-  //.locals init ([0] int32 a)
-  IL_0000:  nop
-  IL_0001:  ldc.i4.5
-  IL_0002:  stloc.0
-  IL_0003:  ret
-} // end of method Program::Main
+.entrypoint
+.locals init ([0] int32 a)
+ldc.i4.s 34 
+stloc 0
+ldloc.s 0
+call void [mscorlib]System.Console::WriteLine(int32)
+ret
+}

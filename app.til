@@ -3,6 +3,7 @@
 .method static void Main()
 {
 .entrypoint
+.locals init ([2] int32 a)
 save a into 2 as 34
 go get a
 call void [mscorlib]System.Console::WriteLine(int32)
