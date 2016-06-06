@@ -1,5 +1,9 @@
-nop
-1
-2
 nuthin
-3
+load in 1
+store to 0
+nuthin
+load 42 into 99
+nuthin
+save a into 98 as 42
+nuthin
+go get a
