@@ -7,7 +7,7 @@
             "request": "launch",
             "program": "${workspaceRoot}/til.js",
             "stopOnEntry": false,
-            "args": ["app.til", "app.il"],
+            "args": ["test"],
             "cwd": "${workspaceRoot}",
             "preLaunchTask": null,
             "runtimeExecutable": null,

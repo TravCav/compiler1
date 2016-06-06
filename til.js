@@ -1,7 +1,7 @@
 (function() {
     var fs = require('fs');	// so we can read and write files
     var exec = require('child_process').exec;
-
+    
     var EmitFlags = {
         EmitScreen: 1,
         EmitFile: 2
@@ -11,6 +11,9 @@
 
     var fileOutput = "";
     var variables = [];
+    
+    var inputFile = "app.til";
+    var outputFile = "app.il";
 
     function EmitLn(s) {
         if ((EmitMethod & EmitFlags.EmitScreen) === EmitFlags.EmitScreen) {
@@ -18,7 +21,7 @@
         }
 
         if ((EmitMethod & EmitFlags.EmitFile) === EmitFlags.EmitFile) {
-            fileOutput += s + "\r\n";
+            fileOutput += s;
         }
     }
 
@@ -34,22 +37,20 @@
         }
         
         if (outputLine.indexOf("save") > -1){
-            // save a into 98 as 42
-            //console.log("-save: " + outputLine);
             var intoIndex = outputLine.indexOf("into");
             var asIndex = outputLine.indexOf("as");
             var varName =outputLine.substring(5,intoIndex-1);
             var locNum = outputLine.substring(intoIndex+5,asIndex-1);
-            var valNum = outputLine.substring(asIndex+3,outputLine.length);
+            var valNum = outputLine.substring(asIndex+3,outputLine.length-1);
             variables.push({name: varName, loc: locNum});
-            outputLine = "ldc.i4.s " + valNum + " \r\nstloc " + locNum;
+            outputLine = "ldc.i4.s " + valNum + " \rstloc " + locNum + "\r";
         }
         
         if (outputLine.indexOf("go get ") > -1) {
-            varName = outputLine.substring(7,outputLine.length);
+            varName = outputLine.substring(7,outputLine.length-1);
             for(var i = variables.length-1; i >=0; i--){
                 if (variables[i].name == varName){
-                    outputLine = "ldloc.s " + variables[i].loc;
+                    outputLine = "ldloc.s " + variables[i].loc + "\r";
                 }
                 
             }
@@ -59,16 +60,16 @@
         EmitLn(outputLine);
     }
 
-    function CompileIL(filename) {
-        exec(filename, function callback(error, stdout, stderr) {
-            // result
-        });
-    }
+    // function CompileIL(filename) {
+    //     exec(filename, function callback(error, stdout, stderr) {
+    //         // result
+    //     });
+    // }
 
 
-    function ReadFile(filename) {
-        console.log("Reading file: " + filename);
-        var input = fs.createReadStream(filename);
+    function ReadFile() {
+        console.log("Reading file: " + inputFile);
+        var input = fs.createReadStream(inputFile);
 
         var remaining = '';
 
@@ -91,16 +92,16 @@
                 Compile(remaining);
             }
             
-            SaveToFile("app.il");
+            SaveToFile();
         });
 
         console.log("File read");
     }
 
-    function SaveToFile(filename) {
+    function SaveToFile() {
         if ((EmitMethod & EmitFlags.EmitFile) === EmitFlags.EmitFile) {
             console.log("Writing to file.");
-            fs.writeFile(filename, fileOutput, function(err) {
+            fs.writeFile(outputFile, fileOutput, function(err) {
                 if (err) {
                     return console.log(err);
                 }
@@ -112,12 +113,10 @@
 
     // our jouney begins
     console.log('***begin***');
-    ReadFile("app.til");//process.argv[2]);
-    //EmitLn("yeps");
-    //SaveToFile("app.il");//process.argv[3]);
-    ////CompileIL();
-    //EmitLn(fileOutput);
-    
+    var appName = process.argv[2] || "app";
+    inputFile = appName + ".til";
+    outputFile = appName + ".il";
+    ReadFile();
     console.log('***end***');
 
 

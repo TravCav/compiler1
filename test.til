@@ -1,0 +1,18 @@
+.assembly yep {}
+.assembly extern mscorlib {}
+.method static void Main()
+{
+.entrypoint
+ldstr "Hello world"
+call void [mscorlib]System.Console::WriteLine(string)
+nuthin
+load in 1
+store to 0
+nuthin
+load 42 into 99
+nuthin
+save a into 98 as 42
+nuthin
+go get a
+ret
+}
