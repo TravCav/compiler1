@@ -4,8 +4,7 @@
 {
 .entrypoint
 .locals init ([0] int32 a)
-ldc.i4.s 34 
-stloc 0
+ldc.i4.s 34 stloc 0
 ldloc.s 0
 call void [mscorlib]System.Console::WriteLine(int32)
 ret

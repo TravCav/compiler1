@@ -27,13 +27,15 @@
 
     function Compile(inputLine) {
         var outputLine = inputLine;
+        outputLine = outputLine.replace(/\r/g,'');
+        outputLine = outputLine.replace(/\n/g,'');
         outputLine = outputLine.replace(/nuthin/g, 'nop');
         outputLine = outputLine.replace(/load in/g, 'ldc.i4.s');
         outputLine = outputLine.replace(/store to/g, 'stloc');
         
         if (outputLine.indexOf("load") > -1 && outputLine.indexOf("into") > -1){
             outputLine = outputLine.replace(/load/g, 'ldc.i4.s');
-            outputLine = outputLine.replace(/into/g,'\r\nstloc');
+            outputLine = outputLine.replace(/into/g,'\rstloc');
         }
         
         if (outputLine.indexOf("save") > -1){
@@ -41,13 +43,14 @@
             var asIndex = outputLine.indexOf("as");
             var varName =outputLine.substring(5,intoIndex-1);
             var locNum = outputLine.substring(intoIndex+5,asIndex-1);
-            var valNum = outputLine.substring(asIndex+3,outputLine.length-1);
+            var valNum = outputLine.substring(asIndex+3,outputLine.length);
+            
             variables.push({name: varName, loc: locNum});
             outputLine = "ldc.i4.s " + valNum + " \rstloc " + locNum + "\r";
         }
         
         if (outputLine.indexOf("go get ") > -1) {
-            varName = outputLine.substring(7,outputLine.length-1);
+            varName = outputLine.substring(7,outputLine.length);
             for(var i = variables.length-1; i >=0; i--){
                 if (variables[i].name == varName){
                     outputLine = "ldloc.s " + variables[i].loc + "\r";
@@ -57,7 +60,7 @@
             
         }
         
-        EmitLn(outputLine);
+        EmitLn(outputLine + "\n");
     }
 
     // function CompileIL(filename) {
