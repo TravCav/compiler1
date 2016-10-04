@@ -39,6 +39,11 @@
         }
         
         if (outputLine.indexOf("save") > -1){
+            /*
+            // make it do the locals thing
+            .locals init ([0] int32 a)
+            save a into 0 as 34
+             */
             var intoIndex = outputLine.indexOf("into");
             var asIndex = outputLine.indexOf("as");
             var varName =outputLine.substring(5,intoIndex-1);
