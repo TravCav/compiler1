@@ -46,13 +46,24 @@
              */
             var intoIndex = outputLine.indexOf("into");
             var asIndex = outputLine.indexOf("as");
-            var varName =outputLine.substring(5,intoIndex-1);
+            var varName = outputLine.substring(5,intoIndex-1);
             var locNum = outputLine.substring(intoIndex+5,asIndex-1);
             var valNum = outputLine.substring(asIndex+3,outputLine.length);
             
             variables.push({name: varName, loc: locNum});
             outputLine = "ldc.i4.s " + valNum + " \rstloc " + locNum + "\r";
         }
+
+        // // TinyNumber <varName> equals <number>
+        // if (outputLine.indexOf("TinyNumber")) {
+        //     var equalsIndex = outputLine.indexOf("equals");
+        //     var varName = outputLine.substring(11,equalsIndex-1);
+        //     var locNum = outputLine.substring(equalsIndex+5,equalsIndex-1);
+        //     var valNum = outputLine.substring(equalsIndex+3,outputLine.length);
+            
+        //     variables.push({name: varName, loc: locNum});
+        //     outputLine = "ldc.i4.s " + valNum + " \rstloc " + locNum + "\r";
+        // }
         
         if (outputLine.indexOf("go get ") > -1) {
             varName = outputLine.substring(7,outputLine.length);
@@ -108,7 +119,7 @@
 
     function SaveToFile() {
         if ((EmitMethod & EmitFlags.EmitFile) === EmitFlags.EmitFile) {
-            console.log("Writing to file.");
+            console.log("Writing to file: " + outputFile);
             fs.writeFile(outputFile, fileOutput, function(err) {
                 if (err) {
                     return console.log(err);

@@ -7,5 +7,6 @@
 save a into 0 as 34
 go get a
 call void [mscorlib]System.Console::WriteLine(int32)
+TinyNumber life equals 42
 ret
 }
