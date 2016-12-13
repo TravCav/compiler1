@@ -13,9 +13,10 @@ nop
 ldc.i4.s 42 stloc 1
 nop
 ldc.i4.s 42 stloc 2
-// go get a
 ldloc.s 2call void [mscorlib]System.Console::WriteLine(int32)
 nop
+// this stuff needs implemented
 // TinyNumber life equals 42
+// go get life
 ret
 }

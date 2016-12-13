@@ -13,9 +13,10 @@ nuthin
 load 42 into 1
 nuthin
 save a into 2 as 42
-// go get a
 tell the world about a
 nuthin
-yodawg TinyNumber life equals 42
+yodawg this stuff needs implemented
+nothing to see here: TinyNumber life equals 42
+nothing to see here: go get life
 ret
 }

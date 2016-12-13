@@ -32,16 +32,21 @@
         outputLine = outputLine.replace(/nuthin/g, 'nop');
         outputLine = outputLine.replace(/load in/g, 'ldc.i4.s');
         outputLine = outputLine.replace(/store to/g, 'stloc');
+
         if (outputLine.indexOf("yodawg ") === 0) {
             outputLine = outputLine.replace(/yodawg /g, '// ');
         }
+        
+        if (outputLine.indexOf("nothing to see here: ") === 0) {
+            outputLine = outputLine.replace(/nothing to see here: /g, '// ');
+        }
 
-        if (outputLine.indexOf("load") > -1 && outputLine.indexOf("into") > -1){
+        if (outputLine.indexOf("load") === 0 && outputLine.indexOf("into") > -1){
             outputLine = outputLine.replace(/load/g, 'ldc.i4.s');
             outputLine = outputLine.replace(/into/g,'\rstloc');
         }
         
-        if (outputLine.indexOf("save") > -1){
+        if (outputLine.indexOf("save") === 0){
             /*
             // make it do the locals thing
             .locals init ([0] int32 a, [1] int32 q)
@@ -68,7 +73,7 @@
         //     outputLine = "ldc.i4.s " + valNum + " \rstloc " + locNum + "\r";
         // }
         
-        if (outputLine.indexOf("go get ") > -1) {
+        if (outputLine.indexOf("go get ") === 0) {
             varName = outputLine.substring(7,outputLine.length);
             for(var i = variables.length-1; i >=0; i--){
                 if (variables[i].name == varName){
