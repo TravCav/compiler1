@@ -32,7 +32,10 @@
         outputLine = outputLine.replace(/nuthin/g, 'nop');
         outputLine = outputLine.replace(/load in/g, 'ldc.i4.s');
         outputLine = outputLine.replace(/store to/g, 'stloc');
-        
+        if (outputLine.indexOf("yodawg ") === 0) {
+            outputLine = outputLine.replace(/yodawg /g, '// ');
+        }
+
         if (outputLine.indexOf("load") > -1 && outputLine.indexOf("into") > -1){
             outputLine = outputLine.replace(/load/g, 'ldc.i4.s');
             outputLine = outputLine.replace(/into/g,'\rstloc');
@@ -41,7 +44,7 @@
         if (outputLine.indexOf("save") > -1){
             /*
             // make it do the locals thing
-            .locals init ([0] int32 a)
+            .locals init ([0] int32 a, [1] int32 q)
             save a into 0 as 34
              */
             var intoIndex = outputLine.indexOf("into");
@@ -73,7 +76,16 @@
                 }
                 
             }
-            
+        }
+
+        if (outputLine.indexOf("tell the world about ") === 0) {
+            varName = outputLine.substring(21,outputLine.length);
+            for(var i = variables.length-1; i >=0; i--){
+                if (variables[i].name == varName){
+                    outputLine = "ldloc.s " + variables[i].loc + "\rcall void [mscorlib]System.Console::WriteLine(int32)";
+                }
+                
+            }
         }
         
         EmitLn(outputLine + "\n");
@@ -110,7 +122,8 @@
             if (remaining.length > 0) {
                 Compile(remaining);
             }
-            
+
+            console.log('variables: ', variables);
             SaveToFile();
         });
 

@@ -3,10 +3,19 @@
 .method static void Main()
 {
 .entrypoint
-.locals init ([0] int32 a)
-save a into 0 as 34
-go get a
-call void [mscorlib]System.Console::WriteLine(int32)
-TinyNumber life equals 42
+.locals init ([0] int32, [1] int32, [2] int32)
+ldstr "Hello world"
+call void [mscorlib]System.Console::WriteLine(string)
+nuthin
+load in 1
+store to 0
+nuthin
+load 42 into 1
+nuthin
+save a into 2 as 42
+// go get a
+tell the world about a
+nuthin
+yodawg TinyNumber life equals 42
 ret
 }
