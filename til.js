@@ -29,17 +29,11 @@
         var outputLine = inputLine;
         outputLine = outputLine.replace(/\r/g,'');
         outputLine = outputLine.replace(/\n/g,'');
-        outputLine = outputLine.replace(/nuthin/g, 'nop');
-        outputLine = outputLine.replace(/load in/g, 'ldc.i4.s');
-        outputLine = outputLine.replace(/store to/g, 'stloc');
-
-        if (outputLine.indexOf("yodawg ") === 0) {
-            outputLine = outputLine.replace(/yodawg /g, '// ');
-        }
-        
-        if (outputLine.indexOf("nothing to see here: ") === 0) {
-            outputLine = outputLine.replace(/nothing to see here: /g, '// ');
-        }
+        outputLine = outputLine.replace(/^nuthin/g, 'nop');
+        outputLine = outputLine.replace(/^load in/g, 'ldc.i4.s');
+        outputLine = outputLine.replace(/^store to/g, 'stloc');
+        outputLine = outputLine.replace(/^yodawg /g, '// ');
+        outputLine = outputLine.replace(/^nothing to see here: /g, '// ');
 
         if (outputLine.indexOf("load") === 0 && outputLine.indexOf("into") > -1){
             outputLine = outputLine.replace(/load/g, 'ldc.i4.s');
@@ -63,13 +57,13 @@
         }
 
         // // TinyNumber <varName> equals <number>
-        // if (outputLine.indexOf("TinyNumber")) {
+        // if (outputLine.indexOf("TinyNumber ") === 0) {
         //     var equalsIndex = outputLine.indexOf("equals");
         //     var varName = outputLine.substring(11,equalsIndex-1);
-        //     var locNum = outputLine.substring(equalsIndex+5,equalsIndex-1);
-        //     var valNum = outputLine.substring(equalsIndex+3,outputLine.length);
+        //     // gotta get varNum from .locals and stuff
+        //     var valNum = outputLine.substring(equalsIndex+varName.length + 3,outputLine.length);
             
-        //     variables.push({name: varName, loc: locNum});
+        //     variables.push({name: varName, loc: valNum});
         //     outputLine = "ldc.i4.s " + valNum + " \rstloc " + locNum + "\r";
         // }
         

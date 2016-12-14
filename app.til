@@ -3,20 +3,30 @@
 .method static void Main()
 {
 .entrypoint
-.locals init ([0] int32, [1] int32, [2] int32)
+.locals init ([0] int32, [1] int32, [2] int32, [3] int32)
 ldstr "Hello world"
 call void [mscorlib]System.Console::WriteLine(string)
+
+yodawg nuthvin sounds better than nop
 nuthin
+
+yodawg these just replace IL statements 1:1. pushin and popin in style
 load in 1
 store to 0
-nuthin
+
+yodawg this does a push and pop in one easy step
 load 42 into 1
-nuthin
+
+yodawg pushin an poppin's never been so easy
+save rekt into 3 as 127
+go get rekt
+call void [mscorlib]System.Console::WriteLine(int32)
+
+yodawg this does 4 things
 save a into 2 as 42
 tell the world about a
-nuthin
-yodawg this stuff needs implemented
+
+yodawg this hasn't been implemented yet.
 nothing to see here: TinyNumber life equals 42
-nothing to see here: go get life
 ret
 }
