@@ -72,6 +72,7 @@ function Compile(inputLine) {
             type: "int32",
             name: varName
         });
+
         outputLine = "ldc.i4.s " + valNum + " \rstloc " + locNum + "\r";
     }
 
@@ -92,7 +93,6 @@ function Compile(inputLine) {
             if (variables[i].name == goGetVarName) {
                 outputLine = "ldloc.s " + variables[i].loc + "\r";
             }
-
         }
     }
 
@@ -102,7 +102,6 @@ function Compile(inputLine) {
             if (variables[i].name == tellVarName) {
                 outputLine = "ldloc.s " + variables[i].loc + "\rcall void [mscorlib]System.Console::WriteLine(int32)";
             }
-
         }
     }
 
