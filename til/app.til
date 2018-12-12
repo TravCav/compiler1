@@ -1,0 +1,32 @@
+.assembly yep {}
+.assembly extern mscorlib {}
+.method static void Main()
+{
+.entrypoint
+.locals init ([0] int32)
+ldstr "Hello world"
+call void [mscorlib]System.Console::WriteLine(string)
+
+yodawg nuthin sounds better than nop
+nuthin
+
+yodawg these just replace IL statements 1:1. pushin and popin in style
+load in 1
+store to 0
+
+yodawg this does a push and pop in one easy step
+load 42 into 0
+
+yodawg pushin an poppin's never been so easy
+save rekt into 0 as 127
+go get rekt
+call void [mscorlib]System.Console::WriteLine(int32)
+
+yodawg this does 4 things
+save a into 0 as 42
+tell the world about a
+
+yodawg this hasn't been implemented yet.
+nothing to see here: TinyNumber life equals 42
+ret
+}
