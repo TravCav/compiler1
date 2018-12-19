@@ -5,10 +5,10 @@
             "name": "Launch",
             "type": "node",
             "request": "launch",
-            "program": "${workspaceRoot}/til.js",
+            "program": "${workspaceRoot}/til/til.js",
             "stopOnEntry": false,
             "args": ["app"],
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceRoot}/til/",
             "preLaunchTask": null,
             "runtimeExecutable": null,
             "runtimeArgs": [
@@ -17,9 +17,7 @@
             "env": {
                 "NODE_ENV": "development"
             },
-            "externalConsole": false,
-            "sourceMaps": false,
-            "outDir": null
+            "sourceMaps": false
         },
         {
             "name": "Attach",
@@ -29,7 +27,6 @@
             "address": "localhost",
             "restart": false,
             "sourceMaps": false,
-            "outDir": null,
             "localRoot": "${workspaceRoot}",
             "remoteRoot": null
         }
